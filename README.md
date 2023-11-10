@@ -6,7 +6,6 @@ This software is distributed under the terms of the Apache License, Version 2.0.
 
 <!-- md2toc -l 2 README.md -->
 * [Overview](#overview)
-* [How to use this library](#how-to-use-this-library)
 * [API](#api)
 * [Environment](#environment)
 * [Logging](#logging)
