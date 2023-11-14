@@ -1,5 +1,8 @@
-run:
-	env LOGCAT=service,session,op go run ./...
+bin/folio-list-users:
+	cd bin; go build -o folio-list-users ./...
+
+run: bin/folio-list-users
+	env LOGCAT=service,session,op,auth bin/folio-list-users
 
 lint:
 	go vet ./...
@@ -12,3 +15,5 @@ superlint:
 	-ineffassign ./...
 	-deadcode
 
+clean:
+	rm -f bin/folio-list-users
