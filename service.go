@@ -1,3 +1,4 @@
+// Package foliogo provides a client library for the FOLIO LMS
 package foliogo
 
 import "os"
@@ -35,8 +36,11 @@ func (this Service)Log(cat string, args ...string) {
 }
 
 
-func (this Service)Login(tenant string, username string, password string) Session {
+func (this Service)Login(tenant string, username string, password string) (Session, error) {
 	session := NewSession(this, tenant, username, password)
-	session.Login()
-	return session
+	err := session.Login()
+	if err != nil {
+		return Session{}, err
+	}
+	return session, nil
 }
