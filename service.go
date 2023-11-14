@@ -25,7 +25,7 @@ func NewService(url string) Service {
 		url: url,
 		logger: catlogger.MakeLogger(logcat, "", false),
 	}
-	s.Log("service", "Made new service on URL", url);
+	s.Log("service", "Made new service on URL", url)
 	return s
 }
 
@@ -37,6 +37,6 @@ func (this Service)Log(cat string, args ...string) {
 
 func (this Service)Login(tenant string, username string, password string) Session {
 	session := NewSession(this, tenant, username, password)
-	session.login()
-	return session;
+	session.Login()
+	return session
 }
