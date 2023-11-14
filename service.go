@@ -24,21 +24,25 @@ func NewService(url string) Service {
 	return s
 }
 
-func (s Service)Log(cat string, args ...string) {
-	s.logger.Log(cat, args...)
+
+func (this Service) String() string {
+	return "SERVICE(" + this.url + ")"
 }
 
-/*
-  async login(tenant, username, password) {
-    const session = new FolioSession(this, tenant, username, password);
-    await session.login();
-    return session;
-  }
+func (this Service)Log(cat string, args ...string) {
+	this.logger.Log(cat, args...)
+}
 
-  resumeSession(tenant, token) {
-    const session = new FolioSession(this, tenant);
-    session.token = token; // It might be more polite to use an API here
-    return session;
-  }
+
+func (this Service)Login(tenant string, username string, password string) Session {
+	session := NewSession(this, tenant, username, password)
+	session.login()
+	return session;
+}
+
+
+/*
+func (this Service)resumeSession(tenant string, legacyToken string) Session {
+	return NewSessionFromToken(this, tenant, legacyToken)
 }
 */
