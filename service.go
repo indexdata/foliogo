@@ -10,6 +10,11 @@ type Service struct {
 }
 
 
+func (this Service)String() string {
+	return "SERVICE(" + this.url + ")"
+}
+
+
 func NewService(url string) Service {
 	logcat := os.Getenv("LOGGING_CATEGORIES")
 	if (logcat == "") {
@@ -25,10 +30,6 @@ func NewService(url string) Service {
 }
 
 
-func (this Service) String() string {
-	return "SERVICE(" + this.url + ")"
-}
-
 func (this Service)Log(cat string, args ...string) {
 	this.logger.Log(cat, args...)
 }
@@ -39,10 +40,3 @@ func (this Service)Login(tenant string, username string, password string) Sessio
 	session.login()
 	return session;
 }
-
-
-/*
-func (this Service)resumeSession(tenant string, legacyToken string) Session {
-	return NewSessionFromToken(this, tenant, legacyToken)
-}
-*/
