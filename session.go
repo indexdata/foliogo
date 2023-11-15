@@ -104,14 +104,13 @@ func (this Session)Fetch(path string, params RequestParams) (Hash, error) {
 	this.Log("status", resp.Status, "(" + contentType + ")")
 
 	if resp.StatusCode < 200 || resp.StatusCode > 300 {
-
 		return nil, *MakeHttpError(resp.StatusCode, method, url)
 	}
 	bytes, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
-	this.Log("body", string(bytes))
+	this.Log("response", string(bytes))
 
 	// Every valid FOLIO WSAPI is JSON
 	var data Hash
