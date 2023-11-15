@@ -98,20 +98,21 @@ func (this Session)Fetch(path string, params RequestParams) (Hash, error) {
 
 	resp, err := this.client.Do(req)	
 	if err != nil {
+		// I think this is for a low-level error such as DNS resolution failure
 		return Hash{}, err
 	}
 	defer resp.Body.Close()
 	contentType := resp.Header.Get("Content-Type")
 	this.Log("status", resp.Status, "(" + contentType + ")")
 
-	if resp.StatusCode < 200 || resp.StatusCode > 300 {
-		return nil, *MakeHTTPError(resp.StatusCode, method, url)
-	}
 	bytes, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
 	this.Log("response", string(bytes))
+	if resp.StatusCode < 200 || resp.StatusCode > 300 {
+		return nil, *MakeHTTPError(resp.StatusCode, method, url, string(bytes))
+	}
 
 	// Every valid FOLIO WSAPI is JSON
 	var data Hash
