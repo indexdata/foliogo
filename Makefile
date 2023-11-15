@@ -2,7 +2,7 @@ bin/folio-list-users: bin/folio-list-users.go  service.go session.go http-error.
 	cd bin; go build -o folio-list-users ./...
 
 run: bin/folio-list-users
-	env LOGCAT=service,session,op,auth bin/folio-list-users
+	env LOGCAT=service,session,auth,op,request bin/folio-list-users
 
 lint:
 	go vet ./...
