@@ -16,7 +16,17 @@ This software is distributed under the terms of the Apache License, Version 2.0.
 
 FolioGo is a simple Go module to allow the creation of code that manipulate instances of [the FOLIO library services platform](https://www.folio.org/). For example, [a very simple program](bin/folio-list-users.go) to list the first 20 usernames, with asterisks next to the active ones, might read as follows:
 ```
-XXX copy from source code when working
+package main
+
+import "fmt"
+import "github.com/indexdata/foliogo"
+
+func main() {
+	service := foliogo.NewService("https://folio-snapshot-okapi.dev.folio.org")
+	session, _ := service.Login("diku", "user-basic-view", "user-basic-view")
+	body, _ := session.Fetch("users?limit=20", foliogo.RequestParams{})
+	fmt.Println(body)
+}
 ```
 
 This module is a port of [the FolioJS Node package](https://github.com/indexdata/foliojs) which does the same thing for JavaScript. We need the Go version to become part of [the FOLIO module mod-reporting](https://github.com/indexdata/mod-reporting), but it will likely have plenty of other uses.
