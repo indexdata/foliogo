@@ -90,6 +90,9 @@ func (this Session)Fetch(path string, params RequestParams) (Hash, error) {
 		return Hash{}, err
 	}
 	req.Header.Add("X-Okapi-Tenant", this.tenant)
+	if params.json != nil {
+		req.Header.Add("Content-type", "application/json")
+	}
 	curlCommand, _ := http2curl.GetCurlCommand(req)
 	this.Log("curl", curlCommand.String())
 
