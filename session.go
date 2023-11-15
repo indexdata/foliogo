@@ -40,7 +40,7 @@ func (this Session)String() string {
 func NewSession(service Service, tenant string, username string, password string) (Session, error) {
 	jar, err := cookiejar.New(nil) // XXX or &cookiejar.Options{}
 	if err != nil {
-		return Session{}, err;
+		return Session{}, err
 	}
 	this := Session{
 		service: service,
@@ -140,7 +140,7 @@ func (this Session)Login() error {
 	now := time.Now().UTC()
 	diff := expiryTime.Sub(now)
 	diff90 := 9 * diff / 10
-	this.refreshAfter = now.Add(diff90);
+	this.refreshAfter = now.Add(diff90)
 
 	return nil
 }
