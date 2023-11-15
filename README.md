@@ -41,12 +41,13 @@ The behaviour of the FolioGo library can be modified by the values of the follow
 This library uses the tiny but beautiful [`catlogger`](https://github.com/MikeTaylor/catlogger) library to provide optional logging. This is configured at run-time by the `LOGGING_CATEGORIES` or `LOGCAT` environment variable, which is set to a comma-separated list of categories such as `op,curl,status`. Messages in all the listed categories are logged.
 
 Apart from categories used by `log` invocations in application code, the following categories are used by the libarary itself:
+* `service`: log when a new service is created.
+* `session`: log when a new session is created.
 * `op`: whenever a high-level Okapi operation is about to be executed, its name and parameters are logged.
 * `auth`: emits messages when authenticating or re-authenticating a session.
 * `curl`: whenever an HTTP request is made, the equivalent `curl` command is logged. This can be useful for reproducing bugs.
 * `status`: whenever an HTTP response is received, its HTTP status and content-type are logged. The combination of `op,status` is useful for tracing what a program is doing.
 * `response`: whenever an HTTP response is received, its content is logged.
-
 
 ## Author
 
