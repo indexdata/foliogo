@@ -17,7 +17,7 @@ func main() {
 		os.Exit(2)
 	}
 
-	// Unfortunatly, the rendering part is clumsy in Go
+	// Unfortunately, the rendering part is clumsy in Go
 	users := body["users"].([]interface{})
 	for _, e := range users {
 		user := e.(map[string]interface{})
