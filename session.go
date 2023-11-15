@@ -8,6 +8,8 @@ import "encoding/json"
 import "net/http"
 import "net/http/cookiejar"
 
+import "moul.io/http2curl"
+
 
 // Hash is useful for writing out complex constants for JSON serialization
 type Hash map[string]interface{}
@@ -87,6 +89,8 @@ func (this Session)Fetch(path string, params RequestParams) (Hash, error) {
 		return Hash{}, err
 	}
 	req.Header.Add("X-Okapi-Tenant", this.tenant)
+	this.Log("curl", http2curl.GetCurlCommand(req))
+
 	resp, err := this.client.Do(req)	
 	if err != nil {
 		return Hash{}, err
