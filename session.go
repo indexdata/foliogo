@@ -4,6 +4,7 @@ package foliogo
 import "io"
 import "fmt"
 import "strings"
+import "time"
 import "encoding/json"
 import "net/http"
 import "net/http/cookiejar"
@@ -21,6 +22,7 @@ type Session struct {
 	username string
 	password string
 	client http.Client
+	refreshAfter time.Time
 }
 
 
@@ -77,9 +79,9 @@ func (this Session)Fetch(path string, params RequestParams) (Hash, error) {
 	method := params.method
 	if (method == "") {
 		if (body == "") {
-			method = "POST"
-		} else {
 			method = "GET"
+		} else {
+			method = "POST"
 		}
 	}
 
@@ -89,24 +91,32 @@ func (this Session)Fetch(path string, params RequestParams) (Hash, error) {
 		return Hash{}, err
 	}
 	req.Header.Add("X-Okapi-Tenant", this.tenant)
-	this.Log("curl", http2curl.GetCurlCommand(req))
+	curlCommand, _ := http2curl.GetCurlCommand(req)
+	// I don't know why I need this Sprintf, but curlCommand is not a string and cannot be simply converted
+	this.Log("curl", fmt.Sprintf("%s", curlCommand))
 
 	resp, err := this.client.Do(req)	
 	if err != nil {
 		return Hash{}, err
 	}
 	defer resp.Body.Close()
+	contentType := resp.Header.Get("Content-Type")
+	this.Log("status", resp.Status, "(" + contentType + ")")
+
 	if resp.StatusCode < 200 || resp.StatusCode > 300 {
+
 		return nil, *MakeHttpError(resp.StatusCode, method, url)
 	}
 	bytes, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
-	s := string(bytes)
-	this.Log("body", s)
+	this.Log("body", string(bytes))
 
-	return Hash{"error": "not yet implemented"}, nil
+	// Every valid FOLIO WSAPI is JSON
+	var data Hash
+	err = json.Unmarshal(bytes, &data)
+	return data, nil
 }
 
 
@@ -114,23 +124,20 @@ func (this Session)Login() error {
 	this.Log("op", "login(user=" + this.username + ")")
 	this.Log("auth", "trying new-style authentication with expiry")
 	body := Hash{ "tenant": this.tenant, "username": this.username, "password": this.password }
-	json, err := this.Fetch("authn/login-with-expiry", RequestParams{
+	data, err := this.Fetch("authn/login-with-expiry", RequestParams{
 		json: body,
 	})
-	if err != nil { return err }
-	fmt.Println(json)
-	return nil
-	/*
-	then := Date.parse(json) // XXX should be one element thereof
-	now := Date.now()
-	ttl := then - now
-	fst := process.env.FOLIOJS_SESSION_TIMEOUT
-	if (fst == "") {
-		timeout = ttl / 2
-	} else {
-		timeout := fst * 1000
+	if err != nil {
+		return err
 	}
-	this.sessionCookie = json.sessionCookie
-	// XXX remember to refresh token as needed
-	*/
+
+	expiryString := data["accessTokenExpiration"].(string)
+	// We don't really care about refreshTokenExpiration
+	expiryTime, err :=  time.Parse(time.RFC3339, expiryString)
+	now := time.Now().UTC()
+	diff := expiryTime.Sub(now)
+	diff90 := 9 * diff / 10
+	this.refreshAfter = now.Add(diff90);
+
+	return nil
 }
