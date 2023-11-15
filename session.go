@@ -2,7 +2,6 @@ package foliogo
 
 
 import "io"
-import "fmt"
 import "strings"
 import "time"
 import "encoding/json"
@@ -67,8 +66,8 @@ func (this Session)Fetch(path string, params RequestParams) (Hash, error) {
 	var body string
 	var err error
 	if (params.json != nil) {
-		bytes, err := json.Marshal(params.json)
-		if err != nil {
+		bytes, err2 := json.Marshal(params.json)
+		if err2 != nil {
 			return Hash{}, err
 		}
 		body = string(bytes)
@@ -92,8 +91,7 @@ func (this Session)Fetch(path string, params RequestParams) (Hash, error) {
 	}
 	req.Header.Add("X-Okapi-Tenant", this.tenant)
 	curlCommand, _ := http2curl.GetCurlCommand(req)
-	// I don't know why I need this Sprintf, but curlCommand is not a string and cannot be simply converted
-	this.Log("curl", fmt.Sprintf("%s", curlCommand))
+	this.Log("curl", curlCommand.String())
 
 	resp, err := this.client.Do(req)	
 	if err != nil {
@@ -104,7 +102,7 @@ func (this Session)Fetch(path string, params RequestParams) (Hash, error) {
 	this.Log("status", resp.Status, "(" + contentType + ")")
 
 	if resp.StatusCode < 200 || resp.StatusCode > 300 {
-		return nil, *MakeHttpError(resp.StatusCode, method, url)
+		return nil, *MakeHTTPError(resp.StatusCode, method, url)
 	}
 	bytes, err := io.ReadAll(resp.Body)
 	if err != nil {
@@ -115,6 +113,9 @@ func (this Session)Fetch(path string, params RequestParams) (Hash, error) {
 	// Every valid FOLIO WSAPI is JSON
 	var data Hash
 	err = json.Unmarshal(bytes, &data)
+	if err != nil {
+		return nil, err
+	}
 	return data, nil
 }
 
@@ -133,6 +134,9 @@ func (this Session)Login() error {
 	expiryString := data["accessTokenExpiration"].(string)
 	// We don't really care about refreshTokenExpiration
 	expiryTime, err :=  time.Parse(time.RFC3339, expiryString)
+	if err != nil {
+		return err
+	}
 	now := time.Now().UTC()
 	diff := expiryTime.Sub(now)
 	diff90 := 9 * diff / 10

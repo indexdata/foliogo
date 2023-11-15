@@ -9,7 +9,7 @@ type httpError struct {
 	url string
 }
 
-func MakeHttpError(status int, 	method string, url string) *httpError {
+func MakeHTTPError(status int, 	method string, url string) *httpError {
 	return &httpError{status: status, method: method, url: url}
 }
 
