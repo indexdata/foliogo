@@ -42,7 +42,6 @@ The API is described in a separate document, [The FolioGo API](doc/api.md).
 The behaviour of the FolioGo library can be modified by the values of the following environment variables:
 
 * `LOGGING_CATEGORIES` or `LOGCAT` -- see [Logging](#logging) below.
-* `FOLIOGO_OLD_AUTH` (or `FOLIOJS_OLD_AUTH`) -- if defined and set to a truthy value such as `1`, new-style (cookie-based) authentication is not used, only old-style (Okapi token-based) authentication.
 * `FOLIOGO_SESSION_TIMEOUT` (or `FOLIOJS_SESSION_TIMEOUT`) -- if defined, the number of seconds after which a new session cookie will be requested. (If not defined, the default is to request a new cookie after half of the lifetime of the old one, which is typically about ten minutes.)
 
 
