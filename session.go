@@ -1,9 +1,11 @@
 package foliogo
 
 
+import "os"
 import "io"
 import "strings"
 import "time"
+import "strconv"
 import "encoding/json"
 import "net/http"
 import "net/http/cookiejar"
@@ -33,7 +35,7 @@ type RequestParams struct {
 
 
 func (this Session)String() string {
-	return "SESSION(" + this.tenant + "/" + this.username + ")"
+	return "SESSION(" + this.tenant + "/" + this.username + ":" + this.refreshAfter.String() + ")"
 }
 
 
@@ -124,7 +126,7 @@ func (this Session)Fetch(path string, params RequestParams) (Hash, error) {
 }
 
 
-func (this Session)Login() error {
+func (this *Session)Login() error {
 	this.Log("op", "login(user=" + this.username + ")")
 	this.Log("auth", "trying new-style authentication with expiry")
 	body := Hash{ "tenant": this.tenant, "username": this.username, "password": this.password }
@@ -133,6 +135,17 @@ func (this Session)Login() error {
 	})
 	if err != nil {
 		return err
+	}
+
+	timeout := os.Getenv("FOLIOGO_SESSION_TIMEOUT")
+	if timeout != "" {
+		// No need to consult the HTTP response at all!
+		secs, err2 := strconv.Atoi(timeout)
+		if err2 != nil {
+			return err2
+		}
+		this.refreshAfter = time.Now().Add(time.Duration(secs) * time.Second)
+		return nil
 	}
 
 	expiryString := data["accessTokenExpiration"].(string)
