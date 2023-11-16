@@ -64,7 +64,18 @@ func (this Session)Log(cat string, args ...string) {
 }
 
 
-func (this Session)Fetch(path string, params RequestParams) (Hash, error) {
+func (this *Session)Fetch(path string, params RequestParams) (Hash, error) {
+	// Check whether a renewed login is required
+	if (!this.refreshAfter.IsZero() &&
+		time.Now().Compare(this.refreshAfter) > 0) {
+		this.Log("auth", "refresh authentication")
+		this.refreshAfter = time.Time{} // The zero value, prevents recursion loop
+		err := this.Login()
+		if err != nil {
+			return Hash{}, err
+		}
+	}
+
 	var body string
 	var err error
 	if (params.json != nil) {
