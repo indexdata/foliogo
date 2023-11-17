@@ -1,4 +1,4 @@
-bin/folio-list-users: bin/folio-list-users.go  service.go session.go http-error.go
+bin/folio-list-users: bin/folio-list-users.go service.go session.go default-session.go http-error.go
 	cd bin; go build -o folio-list-users ./...
 
 run: bin/folio-list-users
