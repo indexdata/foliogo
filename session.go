@@ -98,7 +98,11 @@ func (this *Session)Fetch(path string, params RequestParams) (Hash, error) {
 	}
 
 	url := this.service.url + "/" + path
-	req, err := http.NewRequest(method, url, strings.NewReader(body))
+	var bodyReader io.Reader
+	if body != "" {
+		bodyReader = strings.NewReader(body)
+	}
+	req, err := http.NewRequest(method, url, bodyReader)
 	if err != nil {
 		return Hash{}, err
 	}
