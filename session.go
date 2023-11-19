@@ -64,7 +64,7 @@ func (this Session)Log(cat string, args ...string) {
 }
 
 
-func (this *Session)Fetch(path string, params RequestParams) (Hash, error) {
+func (this *Session)Fetch(path string, params RequestParams) ([]byte, error) {
 	// Check whether a renewed login is required
 	if (!this.refreshAfter.IsZero() &&
 		time.Now().Compare(this.refreshAfter) > 0) {
@@ -72,7 +72,7 @@ func (this *Session)Fetch(path string, params RequestParams) (Hash, error) {
 		this.refreshAfter = time.Time{} // The zero value, prevents recursion loop
 		err := this.Login()
 		if err != nil {
-			return Hash{}, err
+			return []byte{}, err
 		}
 	}
 
@@ -81,7 +81,7 @@ func (this *Session)Fetch(path string, params RequestParams) (Hash, error) {
 	if (params.json != nil) {
 		bytes, err2 := json.Marshal(params.json)
 		if err2 != nil {
-			return Hash{}, err
+			return []byte{}, err
 		}
 		body = string(bytes)
 	} else {
@@ -104,7 +104,7 @@ func (this *Session)Fetch(path string, params RequestParams) (Hash, error) {
 	}
 	req, err := http.NewRequest(method, url, bodyReader)
 	if err != nil {
-		return Hash{}, err
+		return []byte{}, err
 	}
 	req.Header.Add("X-Okapi-Tenant", this.tenant)
 	if params.json != nil {
@@ -116,7 +116,7 @@ func (this *Session)Fetch(path string, params RequestParams) (Hash, error) {
 	resp, err := this.client.Do(req)	
 	if err != nil {
 		// I think this is for a low-level error such as DNS resolution failure
-		return Hash{}, err
+		return []byte{}, err
 	}
 	defer resp.Body.Close()
 	contentType := resp.Header.Get("Content-Type")
@@ -131,13 +131,7 @@ func (this *Session)Fetch(path string, params RequestParams) (Hash, error) {
 		return nil, *MakeHTTPError(resp.StatusCode, method, url, string(bytes))
 	}
 
-	// Every valid FOLIO WSAPI is JSON
-	var data Hash
-	err = json.Unmarshal(bytes, &data)
-	if err != nil {
-		return nil, err
-	}
-	return data, nil
+	return bytes, nil
 }
 
 
@@ -145,7 +139,7 @@ func (this *Session)Login() error {
 	this.Log("op", "login(user=" + this.username + ")")
 	this.Log("auth", "trying new-style authentication with expiry")
 	body := Hash{ "tenant": this.tenant, "username": this.username, "password": this.password }
-	data, err := this.Fetch("authn/login-with-expiry", RequestParams{
+	bytes, err := this.Fetch("authn/login-with-expiry", RequestParams{
 		json: body,
 	})
 	if err != nil {
@@ -161,6 +155,12 @@ func (this *Session)Login() error {
 		}
 		this.refreshAfter = time.Now().Add(time.Duration(secs) * time.Second)
 		return nil
+	}
+
+	var data Hash
+	err = json.Unmarshal(bytes, &data)
+	if err != nil {
+		return err
 	}
 
 	expiryString := data["accessTokenExpiration"].(string)
