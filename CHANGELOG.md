@@ -1,6 +1,6 @@
 # Change history for @indexdata/foliogo
 
-## [0.1.0](https://github.com/indexdata/foliogo/tree/v0.1.0) (IN PROGRESS)
+## [0.1.0](https://github.com/indexdata/foliogo/tree/v0.1.0) (2023-11-19)
 
 * BREAKING: `session.Fetch` returns a byte slice rather than a string-to-any map. Fixes #8.
 * Do not specify an empty body to send when making a GET request. Fixes #7.
