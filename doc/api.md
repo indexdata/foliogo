@@ -104,7 +104,7 @@ FOLIO authentication cookies are automatically included, along with the `X-Okapi
 
 If content was provided as a `json` parmeter, then the `Content-type: application/json` header is added.
 
-The value returned from a successful call is the respons body (usually JSON), expressed as a `[]byte` slice, and a `nil` error object. If an error occurs, a non-`nil` error is returned.
+The value returned from a successful call is the response body (usually JSON), expressed as a `[]byte` slice, and a `nil` error object. If an error occurs, a non-`nil` error is returned.
 
 
 
