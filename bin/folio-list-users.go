@@ -4,6 +4,7 @@ import "os"
 import "fmt"
 import "time"
 import "strconv"
+import "encoding/json"
 import "github.com/indexdata/foliogo"
 
 func main() {
@@ -19,9 +20,16 @@ func main() {
 		time.Sleep(time.Duration(nsecs) * time.Second)
 	}
 
-	body, err := session.Fetch("users?limit=20", foliogo.RequestParams{})
+	bytes, err := session.Fetch("users?limit=20", foliogo.RequestParams{})
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s: fetch users failed: %s\n", os.Args[0], err)
+		os.Exit(2)
+	}
+
+	var body map[string]interface{}
+	err = json.Unmarshal(bytes, &body)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%s: decode JSON failed: %s\n", os.Args[0], err)
 		os.Exit(2)
 	}
 
