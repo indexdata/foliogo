@@ -7,6 +7,15 @@ import "strconv"
 import "encoding/json"
 import "github.com/indexdata/foliogo"
 
+type user struct {
+	Username string `json:"username"`
+	Active bool `json:"active"`
+}
+type response struct {
+	Users []user `json:"users"`
+	TotalRecords int `json:"totalRecords"y`
+}
+
 func main() {
 	service := foliogo.NewService("https://folio-snapshot-okapi.dev.folio.org")
 	session, err := service.Login("diku", "user-basic-view", "user-basic-view")
@@ -26,23 +35,21 @@ func main() {
 		os.Exit(2)
 	}
 
-	var body map[string]interface{}
-	err = json.Unmarshal(bytes, &body)
+	var r response
+	err = json.Unmarshal(bytes, &r)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s: decode JSON failed: %s\n", os.Args[0], err)
 		os.Exit(2)
 	}
 
-	// Unfortunately, the rendering part is clumsy in Go
-	users := body["users"].([]interface{})
-	for _, e := range users {
-		user := e.(map[string]interface{})
+	users := r.Users
+	for _, user := range users {
 		var marker string
-		if user["active"] == true {
+		if user.Active {
 			marker = "*"
 		} else {
 			marker = " "
 		}
-		fmt.Println(marker, user["username"])
+		fmt.Println(marker, user.Username)
 	}
 }
