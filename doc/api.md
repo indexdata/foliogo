@@ -94,7 +94,7 @@ Emits a log message in the specified category: see [the top-level `README.md`](.
 
 ### session.Fetch(path string, params RequestParams)
 
-Performs an HTTP operation on the session, using an API much like that of [JavaScript `fetch`](https://developer.mozilla.org/en-US/docs/Web/API/fetch). The `path` is interpreted relative to the URL of the service that the session was created for, and should not begin with a slash (`/`). The `params` object can contain any subset of the following parameters:
+Performs an HTTP operation on the session, using an API similar to that of [JavaScript `fetch`](https://developer.mozilla.org/en-US/docs/Web/API/fetch). The `path` is interpreted relative to the URL of the service that the session was created for, and should not begin with a slash (`/`). The `params` object can contain any subset of the following parameters:
 
 * `body` (`string`) -- if provided, this content is sent to the HTTP service as the body of a POST or PUT.
 * `json` (`interface{}`) -- if provided, this is serialised into a string and sent as though it had been provided as the `body`.
@@ -104,7 +104,7 @@ FOLIO authentication cookies are automatically included, along with the `X-Okapi
 
 If content was provided as a `json` parmeter, then the `Content-type: application/json` header is added.
 
-The value returned from a successful call is the parsed JSON of the response, expressed as a `foliogo.Hash` object, and a `nil` error object. If an error occurs, a non-`nil` error is returned.
+The value returned from a successful call is the respons body (usually JSON), expressed as a `[]byte` slice, and a `nil` error object. If an error occurs, a non-`nil` error is returned.
 
 
 
@@ -113,7 +113,8 @@ The value returned from a successful call is the parsed JSON of the response, ex
 This library is based in part on [FolioJS](https://github.com/indexdata/foliojs), an analogous library for JavaScript/Node. Because it is written in Go, there are significant differences in how similar functionality is expressed:
 
 * There is no single top-level object, just a top-level function.
-* The `session.Fetch` and function is synchronous: concurrency can be implemented at the appliction level using goroutines.
+* The `session.Fetch` function is synchronous: concurrency can be implemented at the appliction level using goroutines.
+* `session.Fetch` returns a byte array rather than a deserialized JSON object, as deserialization in Go is done by the caller in the context of knowing the type of the object.
 * Because there is no re-authentication background thread, sessions need not be (and cannot be) closed.
 * No exceptions are thrown. Non-2xx HTTP responses are returned as regular errors and must be checked for an handled by the caller.
 * The data returned from `session.Fetch` is more cumbersome to handle than JavaScript's nice in-memory representation of JSON.
