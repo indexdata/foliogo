@@ -87,6 +87,11 @@ Session objects are not created directly by client code, but by the `service.Log
 The following public methods exist:
 
 
+### session.GetTenant()
+
+Returns the name of the tenant that this session is for. This is sometimes useful in client code that is handed a session by its caller but needs to include the tenant in a FOLIO WSAPI response.
+
+
 ### session.Log(category string, args ...string)
 
 Emits a log message in the specified category: see [the top-level `README.md`](../README.md#logging) for details.

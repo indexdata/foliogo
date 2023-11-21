@@ -59,6 +59,10 @@ func NewSession(service Service, tenant string, username string, password string
 }
 
 
+func (this Session)GetTenant() string {
+	return this.tenant
+}
+
 func (this Session)Log(cat string, args ...string) {
 	this.service.Log(cat, args...)
 }

@@ -1,5 +1,9 @@
 # Change history for @indexdata/foliogo
 
+## [0.1.1](https://github.com/indexdata/foliogo/tree/v0.1.1) (IN PROGRESS)
+
+* Add new session method `GetTenant`.
+
 ## [0.1.0](https://github.com/indexdata/foliogo/tree/v0.1.0) (2023-11-19)
 
 * BREAKING: `session.Fetch` returns a byte slice rather than a string-to-any map. Fixes #8.
