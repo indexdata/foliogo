@@ -1,6 +1,6 @@
 # Change history for @indexdata/foliogo
 
-## [0.1.1](https://github.com/indexdata/foliogo/tree/v0.1.1) (IN PROGRESS)
+## [0.1.1](https://github.com/indexdata/foliogo/tree/v0.1.1) (2023-11-21)
 
 * Add new session method `GetTenant`.
 
