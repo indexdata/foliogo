@@ -1,5 +1,9 @@
 # Change history for @indexdata/foliogo
 
+## [0.1.2](https://github.com/indexdata/foliogo/tree/v0.1.2) (IN PROGRESS)
+
+* Elements of `RequestParams` structure are now capitalised, for access from other packages.
+
 ## [0.1.1](https://github.com/indexdata/foliogo/tree/v0.1.1) (2023-11-21)
 
 * Add new session method `GetTenant`.

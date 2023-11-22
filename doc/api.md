@@ -101,9 +101,9 @@ Emits a log message in the specified category: see [the top-level `README.md`](.
 
 Performs an HTTP operation on the session, using an API similar to that of [JavaScript `fetch`](https://developer.mozilla.org/en-US/docs/Web/API/fetch). The `path` is interpreted relative to the URL of the service that the session was created for, and should not begin with a slash (`/`). The `params` object can contain any subset of the following parameters:
 
-* `body` (`string`) -- if provided, this content is sent to the HTTP service as the body of a POST or PUT.
-* `json` (`interface{}`) -- if provided, this is serialised into a string and sent as though it had been provided as the `body`.
-* `method` (`string`) -- specifies which HTTP method to use (GET, PUT, POST, DELETE, etc.). If this is not explicitly specified, and content is provided (as `body` or `json`) then it defaults to POST, otherwise to GET.
+* `Body` (`string`) -- if provided, this content is sent to the HTTP service as the body of a POST or PUT.
+* `Json` (`interface{}`) -- if provided, this is serialised into a string and sent as though it had been provided as the `body`.
+* `Method` (`string`) -- specifies which HTTP method to use (GET, PUT, POST, DELETE, etc.). If this is not explicitly specified, and content is provided (as `body` or `json`) then it defaults to POST, otherwise to GET.
 
 FOLIO authentication cookies are automatically included, along with the `X-Okapi-Tenant` header.
 

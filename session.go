@@ -28,9 +28,9 @@ type Session struct {
 
 
 type RequestParams struct {
-	method string
-	body string
-	json interface{}
+	Method string
+	Body string
+	Json interface{}
 }
 
 
@@ -82,17 +82,17 @@ func (this *Session)Fetch(path string, params RequestParams) ([]byte, error) {
 
 	var body string
 	var err error
-	if (params.json != nil) {
-		bytes, err2 := json.Marshal(params.json)
+	if (params.Json != nil) {
+		bytes, err2 := json.Marshal(params.Json)
 		if err2 != nil {
 			return []byte{}, err
 		}
 		body = string(bytes)
 	} else {
-		body = params.body
+		body = params.Body
 	}
 
-	method := params.method
+	method := params.Method
 	if (method == "") {
 		if (body == "") {
 			method = "GET"
@@ -111,7 +111,7 @@ func (this *Session)Fetch(path string, params RequestParams) ([]byte, error) {
 		return []byte{}, err
 	}
 	req.Header.Add("X-Okapi-Tenant", this.tenant)
-	if params.json != nil {
+	if params.Json != nil {
 		req.Header.Add("Content-type", "application/json")
 	}
 	curlCommand, _ := http2curl.GetCurlCommand(req)
@@ -144,7 +144,7 @@ func (this *Session)Login() error {
 	this.Log("auth", "trying new-style authentication with expiry")
 	body := Hash{ "tenant": this.tenant, "username": this.username, "password": this.password }
 	bytes, err := this.Fetch("authn/login-with-expiry", RequestParams{
-		json: body,
+		Json: body,
 	})
 	if err != nil {
 		return err
