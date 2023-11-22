@@ -1,5 +1,9 @@
 # Change history for @indexdata/foliogo
 
+## [0.1.3](https://github.com/indexdata/foliogo/tree/v0.1.3) (IN PROGRESS)
+
+* Modify "curl"-category logging to include authentication header. Fixes #12.
+
 ## [0.1.2](https://github.com/indexdata/foliogo/tree/v0.1.2) (2023-11-22)
 
 * Elements of `RequestParams` structure are now capitalised, for access from other packages.

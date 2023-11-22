@@ -114,10 +114,10 @@ func (this *Session)Fetch(path string, params RequestParams) ([]byte, error) {
 	if params.Json != nil {
 		req.Header.Add("Content-type", "application/json")
 	}
-	curlCommand, _ := http2curl.GetCurlCommand(req)
-	this.Log("curl", curlCommand.String())
 
 	resp, err := this.client.Do(req)	
+	curlCommand, _ := http2curl.GetCurlCommand(req)
+	this.Log("curl", curlCommand.String())
 	if err != nil {
 		// I think this is for a low-level error such as DNS resolution failure
 		return []byte{}, err
