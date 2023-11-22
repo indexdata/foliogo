@@ -1,6 +1,6 @@
 # Change history for @indexdata/foliogo
 
-## [0.1.2](https://github.com/indexdata/foliogo/tree/v0.1.2) (IN PROGRESS)
+## [0.1.2](https://github.com/indexdata/foliogo/tree/v0.1.2) (2023-11-22)
 
 * Elements of `RequestParams` structure are now capitalised, for access from other packages.
 * New method `session.Fetch0` simply invokes `Fetch` with an empty `RequestParams` structure.
