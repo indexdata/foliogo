@@ -12,8 +12,10 @@ Copyright (C) 2023 Index Data Aps.
     * [service.Log(category string, args ...string)](#servicelogcategory-string-args-string)
     * [service.Login(tenant string, username string, password string)](#servicelogintenant-string-username-string-password-string)
 * [class `foliogo.Session`](#class-foliogosession)
+    * [session.GetTenant()](#sessiongettenant)
     * [session.Log(category string, args ...string)](#sessionlogcategory-string-args-string)
     * [session.Fetch(path string, params RequestParams)](#sessionfetchpath-string-params-requestparams)
+    * [session.Fetch0(path string)](#sessionfetch0path-string)
 * [Differences from FolioJS](#differences-from-foliojs)
 
 
@@ -110,6 +112,11 @@ FOLIO authentication cookies are automatically included, along with the `X-Okapi
 If content was provided as a `json` parmeter, then the `Content-type: application/json` header is added.
 
 The value returned from a successful call is the response body (usually JSON), expressed as a `[]byte` slice, and a `nil` error object. If an error occurs, a non-`nil` error is returned.
+
+
+### session.Fetch0(path string)
+
+Invokes `session.Fetch` with an empty `RequestParams`. This is a very common usage, used for almost all GETs.
 
 
 

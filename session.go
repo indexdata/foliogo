@@ -139,6 +139,11 @@ func (this *Session)Fetch(path string, params RequestParams) ([]byte, error) {
 }
 
 
+func (this *Session)Fetch0(path string) ([]byte, error) {
+	return this.Fetch(path, RequestParams{})
+}
+
+
 func (this *Session)Login() error {
 	this.Log("op", "login(user=" + this.username + ")")
 	this.Log("auth", "trying new-style authentication with expiry")

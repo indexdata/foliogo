@@ -29,7 +29,7 @@ func main() {
 		time.Sleep(time.Duration(nsecs) * time.Second)
 	}
 
-	bytes, err := session.Fetch("users?limit=20", foliogo.RequestParams{})
+	bytes, err := session.Fetch0("users?limit=20")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s: fetch users failed: %s\n", os.Args[0], err)
 		os.Exit(2)

@@ -24,7 +24,7 @@ import "github.com/indexdata/foliogo"
 func main() {
 	service := foliogo.NewService("https://folio-snapshot-okapi.dev.folio.org")
 	session, _ := service.Login("diku", "user-basic-view", "user-basic-view")
-	body, _ := session.Fetch("users?limit=20", foliogo.RequestParams{})
+	body, _ := session.Fetch0("users?limit=20")
 	fmt.Println(body)
 }
 ```
