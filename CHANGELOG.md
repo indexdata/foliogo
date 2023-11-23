@@ -1,5 +1,9 @@
 # Change history for @indexdata/foliogo
 
+## [0.1.4](https://github.com/indexdata/foliogo/tree/v0.1.4) (IN PROGRESS)
+
+* Repair "curl"-category logging to once more include payloads. Fixes #13.
+
 ## [0.1.3](https://github.com/indexdata/foliogo/tree/v0.1.3) (2023-11-22)
 
 * Modify "curl"-category logging to include authentication header. Fixes #12.

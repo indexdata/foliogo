@@ -24,6 +24,7 @@ type Session struct {
 	password string
 	client http.Client
 	refreshAfter time.Time
+	accessToken string // Used only for "curl"-category logging
 }
 
 
@@ -65,6 +66,18 @@ func (this Session)GetTenant() string {
 
 func (this Session)Log(cat string, args ...string) {
 	this.service.Log(cat, args...)
+}
+
+
+// Private to Fetch
+func extractAccessToken(resp *http.Response) string {
+	for _, cookie := range resp.Cookies() {
+		if cookie.Name == "folioAccessToken" {
+			return cookie.Value
+			break
+		}
+	}
+	return ""
 }
 
 
@@ -115,14 +128,24 @@ func (this *Session)Fetch(path string, params RequestParams) ([]byte, error) {
 		req.Header.Add("Content-type", "application/json")
 	}
 
-	resp, err := this.client.Do(req)
 	curlCommand, _ := http2curl.GetCurlCommand(req)
-	this.Log("curl", curlCommand.String())
+	curlString := curlCommand.String()
+	if this.accessToken != "" {
+		curlString = strings.Replace(curlString, " ", " -H 'X-Okapi-Token: " + this.accessToken + "' ", 1)
+	}
+	this.Log("curl", curlString)
+	resp, err := this.client.Do(req)
 	if err != nil {
 		// I think this is for a low-level error such as DNS resolution failure
 		return []byte{}, err
 	}
 	defer resp.Body.Close()
+
+	// Special case: on login, remember access token for subsequent "curl" logging
+	if path == "authn/login-with-expiry" {
+		this.accessToken = extractAccessToken(resp)
+	}
+
 	contentType := resp.Header.Get("Content-Type")
 	this.Log("status", resp.Status, "(" + contentType + ")")
 
