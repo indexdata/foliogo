@@ -115,7 +115,7 @@ func (this *Session)Fetch(path string, params RequestParams) ([]byte, error) {
 		req.Header.Add("Content-type", "application/json")
 	}
 
-	resp, err := this.client.Do(req)	
+	resp, err := this.client.Do(req)
 	curlCommand, _ := http2curl.GetCurlCommand(req)
 	this.Log("curl", curlCommand.String())
 	if err != nil {
