@@ -1,5 +1,9 @@
 # Change history for @indexdata/foliogo
 
+## [0.1.5](https://github.com/indexdata/foliogo/tree/v0.1.5) (IN PROGRESS)
+
+* Add `service.ResumeSession` (requires token to be passed in for each request). Fixes #14.
+
 ## [0.1.4](https://github.com/indexdata/foliogo/tree/v0.1.4) (2023-11-23)
 
 * Repair "curl"-category logging to once more include payloads. Fixes #13.

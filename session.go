@@ -32,6 +32,7 @@ type RequestParams struct {
 	Method string
 	Body string
 	Json interface{}
+	Token string
 }
 
 
@@ -127,10 +128,13 @@ func (this *Session)Fetch(path string, params RequestParams) ([]byte, error) {
 	if params.Json != nil {
 		req.Header.Add("Content-type", "application/json")
 	}
+	if params.Token != "" {
+		req.Header.Add("X-Okapi-Token", params.Token)
+	}
 
 	curlCommand, _ := http2curl.GetCurlCommand(req)
 	curlString := curlCommand.String()
-	if this.accessToken != "" {
+	if this.accessToken != "" && params.Token == "" {
 		curlString = strings.Replace(curlString, " ", " -H 'X-Okapi-Token: " + this.accessToken + "' ", 1)
 	}
 	this.Log("curl", curlString)

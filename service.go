@@ -49,3 +49,13 @@ func (this Service)Login(tenant string, username string, password string) (Sessi
 
 	return session, nil
 }
+
+
+func (this Service)ResumeSession(tenant string) (Session, error) {
+	session, err := NewSession(this, tenant, "", "NOPASS")
+	if err != nil {
+		return Session{}, err
+	}
+
+	return session, nil
+}
