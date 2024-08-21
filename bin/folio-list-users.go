@@ -6,6 +6,7 @@ import "time"
 import "strconv"
 import "encoding/json"
 import "github.com/indexdata/foliogo"
+import "github.com/MikeTaylor/catlogger"
 
 type user struct {
 	Username string `json:"username"`
@@ -17,11 +18,28 @@ type response struct {
 }
 
 func main() {
-	service := foliogo.NewService("https://folio-snapshot-okapi.dev.folio.org")
-	session, err := service.Login("diku", "user-basic-view", "user-basic-view")
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s: login failed: %s\n", os.Args[0], err)
-		os.Exit(1)
+	var logger *catlogger.Logger
+	if (false) {
+		logger = catlogger.MakeLogger(os.Getenv("LOGCAT"), "", true)
+	}
+	var session foliogo.Session
+	if (true) {
+		var err error
+		service := foliogo.NewService("https://folio-snapshot-okapi.dev.folio.org", logger)
+		session, err = service.Login("diku", "user-basic-view", "user-basic-view")
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s: login failed: %s\n", os.Args[0], err)
+			os.Exit(1)
+		}
+	} else {
+		fmt.Printf("logger = %x\n", logger);
+		// Run with (for example): OKAPI_URL=https://folio-snapshot-okapi.dev.folio.org OKAPI_TENANT=diku OKAPI_USER=user-basic-view OKAPI_PW=user-basic-view
+		var err error
+		session, err = foliogo.NewDefaultSession(logger)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s: default session failed: %s\n", os.Args[0], err)
+			os.Exit(1)
+		}
 	}
 
 	if len(os.Args) > 1 {
