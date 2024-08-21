@@ -1,6 +1,6 @@
 # Change history for @indexdata/foliogo
 
-## [0.1.6](https://github.com/indexdata/foliogo/tree/v0.1.6) (IN PROGRESS)
+## [0.1.6](https://github.com/indexdata/foliogo/tree/v0.1.6) (2024-08-21)
 
 * `NewService` and `NewDefaultSession` both accept optional final arguments, a pre-configured logger. Fixes #16.
 
