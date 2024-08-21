@@ -1,5 +1,9 @@
 # Change history for @indexdata/foliogo
 
+## [0.1.6](https://github.com/indexdata/foliogo/tree/v0.1.6) (IN PROGRESS)
+
+* `NewService` and `NewDefaultSession` both accept optional final arguments, a pre-configured logger. Fixes #16.
+
 ## [0.1.5](https://github.com/indexdata/foliogo/tree/v0.1.5) (2023-12-06)
 
 * Add `service.ResumeSession` (requires token to be passed in for each request). Fixes #14.
