@@ -43,12 +43,14 @@ The API provides four types and a single exported function: that function create
 Two top-level functions are provided:
 
 
-### foliogo.NewService(url string)
+### foliogo.NewService(url string, optLogger ...*catlogger.Logger)
 
 Creates and returns a new `foliogo.Service` object associated with the specified Okapi URL. It is possible for a program to use multiple FOLIO services. See below for details of the `foliogo.Service` class.
 
+If the optional `optLogger` argument is provided, it must be a categorical logger object. This allows a logger configured to the application's liking to be injected into the FOLIO service.
 
-### foliogo.NewDefaultSession()
+
+### foliogo.NewDefaultSession(optLogger ...*catlogger.Logger)
 
 Creates a new `folio.Service` object; and using this, creates and returns a new `foliogo.Session` object. The parameters are taken from the conventional environment variables
 `OKAPI_URL`,
@@ -57,6 +59,9 @@ Creates a new `folio.Service` object; and using this, creates and returns a new 
 and
 `OKAPI_PW`.
 It is an error for any of these to be undefined.
+
+If the optional `optLogger` argument is provided, it must be a categorical logger object. This allows a logger configured to the application's liking to be injected into the FOLIO session.
+
 
 Returns a sesson object and an error; the former is valid only if the latter is `nil`.
 
