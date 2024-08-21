@@ -16,15 +16,22 @@ func (this Service)String() string {
 }
 
 
-func NewService(url string) Service {
-	logcat := os.Getenv("LOGGING_CATEGORIES")
-	if (logcat == "") {
-		logcat = os.Getenv("LOGCAT")
+func NewService(url string, optLogger ...*catlogger.Logger) Service {
+	var logger *catlogger.Logger
+
+	if (len(optLogger) > 0 && optLogger[0] != nil) {
+		logger = optLogger[0]
+	} else {
+		logcat := os.Getenv("LOGGING_CATEGORIES")
+		if (logcat == "") {
+			logcat = os.Getenv("LOGCAT")
+		}
+		logger = catlogger.MakeLogger(logcat, "", false)
 	}
 
 	s := Service{
 		url: url,
-		logger: catlogger.MakeLogger(logcat, "", false),
+		logger: logger,
 	}
 	s.Log("service", "Made new service on URL", url)
 	return s
