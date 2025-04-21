@@ -31,6 +31,7 @@ type Session struct {
 type RequestParams struct {
 	Method string
 	Body string
+	ContentType string
 	Json interface{}
 	Token string
 }
@@ -125,7 +126,9 @@ func (this *Session)Fetch(path string, params RequestParams) ([]byte, error) {
 		return []byte{}, err
 	}
 	req.Header.Add("X-Okapi-Tenant", this.tenant)
-	if params.Json != nil {
+	if params.ContentType != "" {
+		req.Header.Add("Content-type", params.ContentType)
+	} else if params.Json != nil {
 		req.Header.Add("Content-type", "application/json")
 	}
 	if params.Token != "" {
