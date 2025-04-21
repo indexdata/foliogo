@@ -1,6 +1,6 @@
 # Change history for @indexdata/foliogo
 
-## [0.1.7](https://github.com/indexdata/foliogo/tree/v0.1.7) (IN PROGRESS)
+## [0.1.7](https://github.com/indexdata/foliogo/tree/v0.1.7) (2025-03-21)
 
 * `RequestParams` structure now has new optional member `ContentType`. Fixes #20.
 
