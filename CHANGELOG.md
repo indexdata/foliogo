@@ -1,6 +1,6 @@
 # Change history for @indexdata/foliogo
 
-## IN PROGRESS
+## [0.1.8](https://github.com/indexdata/foliogo/tree/v0.1.8) (2025-09-11)
 
 * Require verson 0.0.3 of `catlogger`. Fixes #21.
 
