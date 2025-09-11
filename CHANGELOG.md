@@ -1,5 +1,9 @@
 # Change history for @indexdata/foliogo
 
+## IN PROGRESS
+
+* Require verson 0.0.3 of `catlogger`. Fixes #21.
+
 ## [0.1.7](https://github.com/indexdata/foliogo/tree/v0.1.7) (2025-03-21)
 
 * `RequestParams` structure now has new optional member `ContentType`. Fixes #20.
